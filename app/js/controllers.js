@@ -1,4 +1,5 @@
 (function () {
+
     'use strict';
 
     angular.module('myApp.controllers', [])
@@ -16,9 +17,11 @@
 
             $scope.flags = {orderBy: 'change'};
 
+
             $scope.setOrder = function (string) {
                 $scope.flags.orderBy = string;
             };
+
 
             function getData() {
                 var deferred = $q.defer();

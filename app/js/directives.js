@@ -15,8 +15,6 @@
                 link: function (scope, element, attrs) {
 
 
-
-
                     var activate = function () {
                         var div;
 
@@ -66,18 +64,22 @@
 
                     };
 
+
                     element.bind('mouseenter', activate);
                     element.bind('mouseout', function () {
                         element.removeClass('zoomIn');
                         scope.showDetails = false;
-//                    newEl.remove();
-//                    element.bind('mouseenter',activate);
+
+
+
+
+
 
                     });
 
                 }
-
             };
         }]);
+
 
 })();
