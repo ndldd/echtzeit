@@ -7,14 +7,12 @@
         'myApp.filters',
         'myApp.services',
         'myApp.directives',
-        'myApp.controllers' ,
-
+        'myApp.controllers',
         'ngAnimate'
-    ]).
-        config(['$routeProvider', function ($routeProvider) {
+    ])
+
+        .config(['$routeProvider', function ($routeProvider) {
             $routeProvider.when('/', {templateUrl: 'partials/partial1.html', controller: 'MyCtrl1'});
             $routeProvider.otherwise({redirectTo: '/'});
         }]);
-
-
 })();

@@ -1,7 +1,6 @@
 <div class="content">
     <h1>Hamburg in Zahlen</h1>
     <div class="head">
-
         <!--
             Sortieren nach: <br/>
             <button ng-click="setOrder('title')" class="btn">Beschreibung</button>
@@ -13,47 +12,26 @@
          -->
         Suche:
         <input type="text" ng-model="searchText" style="height: 25px; margin-top:5px"
-                placeholder="z.B.: Wirtschaft"/> <br/>
+               placeholder="z.B.: Wirtschaft"/> <br/>
         <hr/>
         Diese Seite zeigt an, was sich in Hamburg verändert und bewegt hat seit Sie diese Seite göffnet haben.
-
         (Sie sind hier seit: {{data.timePast}} Sekunden.) <br/>
-
     </div>
+
     <div class="masonry">
-        <div ng-repeat="tile in data.tileObjects | orderBy:flags.orderBy | filter:searchText"
+        <div ng-repeat="tile in data.tileObjects | orderBy:flags.orderBy | filter:searchText" class="animate-repeat tileParent " ng-animate="'animate'">
 
-             class="animate-repeat tileParent " ng-animate="'animate'">
+            <div class="tile item" ng-style="{'background-color':tile.color , 'color': tile.textColor }" ez-tile data=tile>
 
-            <div class="tile item" ng-style="{'background-color':tile.color , 'color': tile.textColor }" ez-tile  data=tile>
-
-
-    <span class="tiletext">
-
-                          <span class="tile-title">
-
-            {{ tile.title}}
-                          </span>
-
-    <i class="fa fa-2x" ng-class="tile.iconcss"> </i>
-
-    <span ng-bind-html="tile.description"></span>
-
-        <span ng-show="showDetails">
-
-
-
-        </span>
-
-<!--
-    {{ tile.value | currency : '€'}}
-    {{tile.change}}
- -->
-    </span>
+                <span class="tiletext">
+                    <span class="tile-title">  {{ tile.title}} </span>
+                    <i class="fa fa-2x" ng-class="tile.iconcss"> </i>
+                    <span ng-bind-html="tile.description"></span>
+                    <span ng-show="showDetails"></span>
+                </span>
 
 
             </div>
         </div>
     </div>
-
 </div>
