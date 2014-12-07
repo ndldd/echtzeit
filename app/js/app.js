@@ -12,7 +12,7 @@
     ])
 
         .config(['$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/', {templateUrl: 'partials/partial1.html', controller: 'MyCtrl1'});
+            $routeProvider.when('/', {templateUrl: 'partials/partial1.html', controller: 'TileViewController'});
             $routeProvider.otherwise({redirectTo: '/'});
         }]);
 })();

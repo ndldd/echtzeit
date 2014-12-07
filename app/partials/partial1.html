@@ -1,29 +1,22 @@
 <div class="content">
     <h1>Hamburg in Zahlen</h1>
-    <div class="head">
-        <!--
-            Sortieren nach: <br/>
-            <button ng-click="setOrder('title')" class="btn">Beschreibung</button>
-            <button ng-click="setOrder('color')" class="btn">Farbe</button>
-            <button ng-click="setOrder('description')" class="btn">description</button>
-            <button ng-click="setOrder('change')" class="btn">change</button>
-            <button ng-click="setOrder('value')" class="btn">value</button>
-            <br/>
-         -->
+    <div class="header">
+
         Suche:
-        <input type="text" ng-model="searchText" style="height: 25px; margin-top:5px"
-               placeholder="z.B.: Wirtschaft"/> <br/>
+        <input type="text" ng-model="searchText"  placeholder=" z.B.:Wirtschaft" class="search-box"/>
+
         <hr/>
         Diese Seite zeigt an, was sich in Hamburg verändert und bewegt hat seit Sie diese Seite göffnet haben.
-        (Sie sind hier seit: {{data.timePast}} Sekunden.) <br/>
+        (Sie sind hier seit: {{data.secondsCounter}} Sekunden.) <br/>
     </div>
 
-    <div class="masonry">
-        <div ng-repeat="tile in data.tileObjects | orderBy:flags.orderBy | filter:searchText" class="animate-repeat tileParent " ng-animate="'animate'">
+    <div id=tile-container ez-tile-container class="masonry">
+        <div ng-repeat="tile in data.tileObjects | orderBy:flags.orderBy | filter:searchText" class="animate-repeat " ng-animate="'animate'">
 
-            <div class="tile item" ng-style="{'background-color':tile.color , 'color': tile.textColor }" ez-tile data=tile>
+            <div class="tile" ng-style="{'background-color':tile.color , 'color': tile.textColor }" ez-tile data=tile>
 
-                <span class="tiletext">
+                <span>
+
                     <span class="tile-title">  {{ tile.title}} </span>
                     <i class="fa fa-2x" ng-class="tile.iconcss"> </i>
                     <span ng-bind-html="tile.description"></span>

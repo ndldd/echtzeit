@@ -4,6 +4,7 @@
   "predef": [
     "window",
     "document",
-    "angular"
+    "angular",
+    "Tabletop"
   ]
 }
