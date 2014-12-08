@@ -1,60 +1,32 @@
 (function () {
     'use strict';
 
-    angular.module('myApp.directives', [])
-
+    angular.module('echtzeit.directives', ['echtzeit.filters'])
         .directive('appVersion', ['version', function (version) {
             return function (scope, element) {
                 element.text(version);
             };
         }])
 
-        .directive('ezTileContainer', [function () {
+        .directive('ezTile', ['dotToCommaFilter',function (dotToComma) {
             return {
-                scope: {},
-                controller: function () {
-                    this._openTiles = [];
-
-                    this.closeOthers = function(){
-                        for (var i = 0; i< this._openTiles.length; i++){
-                            this._openTiles[i].close();
-                        }
-                        this._openTiles = [];
-
-                    };
-
-                    this.registerAsOpen = function (tile) {
-                        this._openTiles.push(tile);
-                    };
-                }
-
-            };
-
-        }])
-
-        .directive('ezTile', [function () {
-
-            return {
-                require: '^ezTileContainer',
                 scope: {
-                    data: "="
-
+                    data: "=",
+                    ready: '='
                 },
-                link: function (scope, currentTile, attrs, ezTileContainerController) {
-
-
-                    currentTile.close = function () {
+                link: function (scope, currentTile) {
+                    var close = function () {
                         currentTile.removeClass('zoomIn');
                         scope.showDetails = false;
-
                     };
-                    var activate = function () {
-                        ezTileContainerController.closeOthers();
-                        ezTileContainerController.registerAsOpen(currentTile);
 
+                    var activate = function () {
+                        if (!scope.ready){
+                            return;
+                        }
+                        var container;
                         var top, left;
                         var detailDescription;
-
                         var tileCopy = currentTile.clone();
 
                         // calculate dimension of new tile
@@ -63,35 +35,25 @@
                         tileCopy[0].style.width = String(oldWidth + 20) + 'px';
                         tileCopy[0].style.position = 'absolute';
 
-
                         // calculate position for new tile
-
                         top = currentTile.parent()[0].offsetTop;
-
-
                         tileCopy[0].style.top = String(top - oldHeight * 0.2) + 'px';
-
                         left = currentTile.parent()[0].offsetLeft;
-                        left = left - 25;
+                        left -= 25;
                         left = left >= 0 ? left : 0;
-
                         tileCopy[0].style.left = String(left) + 'px';
 
-
+                        // insert the new tile on top of the original tile (to maintain the flow)
+                        container = angular.element(document.getElementById('tile-container'));
+                        container.prepend(tileCopy);
                         currentTile.off('mouseenter');
-
-
-                        // insert the new tile on top of the old tile
-                        currentTile.parent().parent().prepend(tileCopy);
 
                         // style the new tile
                         tileCopy.addClass('active');
 
-
-                        // add details to the tile
+                        // add details to the new tile
                         detailDescription = angular.element("<div/>");
-                        detailDescription.text('Veränderung: ' + scope.data.displayChange);
-
+                        detailDescription.text('Veränderung: ' + dotToComma(scope.data.displayChange));
                         tileCopy.append(detailDescription);
 
 
@@ -103,12 +65,12 @@
                     };
 
                     currentTile.bind('mouseenter', activate);
+
                     currentTile.bind('mouseout', function () {
-
-                        currentTile.close();
-
+                        close();
                     });
                 }
             };
         }]);
+
 })();

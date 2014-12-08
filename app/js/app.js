@@ -1,18 +1,18 @@
 (function () {
     'use strict';
 
-    angular.module('myApp', [
+    angular.module('echtzeit', [
         'ngRoute',
         'ngSanitize',
-        'myApp.filters',
-        'myApp.services',
-        'myApp.directives',
-        'myApp.controllers',
+        'echtzeit.filters',
+        'echtzeit.services',
+        'echtzeit.directives',
+        'echtzeit.controllers',
         'ngAnimate'
     ])
 
         .config(['$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/', {templateUrl: 'partials/partial1.html', controller: 'TileViewController'});
+            $routeProvider.when('/', {templateUrl: 'partials/tileView.html', controller: 'TileViewController'});
             $routeProvider.otherwise({redirectTo: '/'});
         }]);
 })();

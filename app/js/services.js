@@ -1,13 +1,13 @@
 (function () {
     'use strict';
 
-// use global Tabletop script to fetch data from spreadsheet
-    angular.module('myApp.services', []).
+    // use global Tabletop script to fetch data from spreadsheet
+    angular.module('echtzeit.services', ['echtzeit.filters']).
         value('version', '0.1')
 
 
+        // parses a Spreadsheet and returns the data
         .service('openData', ['$q', function ($q) {
-            // parses a Spreadsheet and returns the data
 
             var deferred = $q.defer();
             var fetchData;
@@ -30,7 +30,7 @@
             return deferred.promise;
         }])
 
-        .factory('tileFactory', [function () {
+        .factory('tileFactory', ['dotToCommaFilter', 'toTextNumberFilter', function (dotToComma, toTextNumber) {
 
             var changePerSecond = function (changePerDay) {
                 var secondsPerDay = 86400;
@@ -39,27 +39,27 @@
 
             var service = {};
 
-            // tile Prototype
+            // the tile Prototype
             var tile = {
                 calculateChangeFormat: function () {
-
                     if (this.change < 100) {
-                        this.displayChange = ' %.2f %s pro Tag'.sprintf(this.change, this.unit);
+                        this.displayChange = toTextNumber(this.change, 'f', 2) +' '+ this.unit +' pro Tag.';
                     }
                     else if (this.change >= 100 && this.change < 1000) {
-                        this.displayChange = ' %.2f %s pro Stunde'.sprintf(this.change / 24, this.unit);
+                        this.displayChange = toTextNumber(this.change/24, 'f', 2) +' '+ this.unit +' pro Stunde.';
+
                     }
                     else if (this.change >= 1000 && this.change < 10000) {
-                        this.displayChange = ' %.2f %s pro Minute'.sprintf(this.change / (24 * 60), this.unit);
+                        this.displayChange = toTextNumber(this.change / (24 * 60), 'f', 2) +' '+ this.unit +' pro Minute.';
                     }
                     else {
-                        this.displayChange = ' %.2f %s pro Sekunde'.sprintf(this.change / (24 * 60 * 60), this.unit);
+                        this.displayChange = toTextNumber(this.change / (24 * 60 * 60), 'f', 2) +' '+ this.unit +' pro Sekunde.';
                     }
                 },
 
                 update: function () {
-                    this.displayValue = Math.floor(this.value);
-                    this.title = this.titleText.sprintf(this.displayValue);
+
+                    this.titleText = this.title.replace(/\%/, toTextNumber(this.value, this.numberformat, this.digits));
                     this.value += this.changeRate;
                 }
             };
@@ -71,18 +71,17 @@
                 var brightTileColors = ['#ffff33'];
 
                 angular.forEach(data, function (item) {
+                    var newTile;
+                    var changePerDay;
 
-                    var change;
-                    var newTile = Object.create(tile);
-
+                    newTile = Object.create(tile);
                     angular.extend(newTile, item);
                     newTile.value = 0;
-                    newTile.displayValue = 0;
-                    newTile.title = item.title.sprintf(newTile.displayValue);
-                    newTile.titleText = item.title;
 
-                    change = parseInt(item.change, 10);
-                    newTile.changeRate = changePerSecond(change);
+                    changePerDay = parseInt(item.change, 10);
+                    newTile.changeRate = changePerSecond(changePerDay);
+
+                    newTile.titleText = item.title.replace(/\%/, toTextNumber(item.value, item.numberformat, item.digits));
 
                     if (brightTileColors.indexOf(newTile.color) !== -1) {
                         newTile.textColor = 'black';     // better contrast
@@ -91,6 +90,7 @@
                         newTile.textColor = 'white';
                     }
                     newTile.calculateChangeFormat();
+
                     tileObjects.push(newTile);
                 });
                 return tileObjects;
@@ -98,6 +98,4 @@
 
             return service;
         }]);
-
-
 })();

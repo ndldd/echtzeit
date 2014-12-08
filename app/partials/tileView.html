@@ -10,14 +10,14 @@
         (Sie sind hier seit: {{data.secondsCounter}} Sekunden.) <br/>
     </div>
 
-    <div id=tile-container ez-tile-container class="masonry">
+    <div id=tile-container class="masonry">
         <div ng-repeat="tile in data.tileObjects | orderBy:flags.orderBy | filter:searchText" class="animate-repeat " ng-animate="'animate'">
 
-            <div class="tile" ng-style="{'background-color':tile.color , 'color': tile.textColor }" ez-tile data=tile>
+            <div class="tile" ng-style="{'background-color':tile.color , 'color': tile.textColor }" ez-tile data=tile ready="flags.ready">
 
                 <span>
 
-                    <span class="tile-title">  {{ tile.title}} </span>
+                    <span class="tile-title">  {{ tile.titleText}} </span>
                     <i class="fa fa-2x" ng-class="tile.iconcss"> </i>
                     <span ng-bind-html="tile.description"></span>
                     <span ng-show="showDetails"></span>
