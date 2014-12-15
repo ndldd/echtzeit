@@ -1,6 +1,4 @@
-/**
- * Created by thomas on 13.08.14.
- */
+
 /* Source: https://raw.githubusercontent.com/jsoma/tabletop/master/src/tabletop.js */
 (function(global) {
   "use strict";

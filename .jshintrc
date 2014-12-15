@@ -1,6 +1,10 @@
 {
-  "globalstrict": true,
-  "globals": {
-    "angular": false
-  }
+  "undef": true,
+  "unused": true,
+  "predef": [
+    "window",
+    "document",
+    "angular",
+    "Tabletop"
+  ]
 }

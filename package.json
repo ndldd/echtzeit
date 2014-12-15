@@ -1,9 +1,9 @@
 {
-  "name": "angular-seed",
+  "name": "echtzeit",
   "private": true,
   "version": "0.0.0",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
+  "description": "simulation of real-time data build on angular-seed",
+  "repository": "https://github.com/ndldd/echtzeit",
   "license": "MIT",
   "devDependencies": {
     "bower": "^1.3.1",

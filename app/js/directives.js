@@ -1,82 +1,73 @@
 (function () {
     'use strict';
 
-    angular.module('myApp.directives', []).
-        directive('appVersion', ['version', function (version) {
-            return function (scope, elm, attrs) {
-                elm.text(version);
+    angular.module('echtzeit.directives', ['echtzeit.filters'])
+        .directive('appVersion', ['version', function (version) {
+            return function (scope, element) {
+                element.text(version);
             };
-        }]).directive('ezTile', [  function () {
+        }])
 
-
+        .directive('ezTile', ['dotToCommaFilter',function (dotToComma) {
             return {
-                scope: { data: "="},
-
-                link: function (scope, element, attrs) {
-
-
-                    var activate = function () {
-                        var div;
-
-
-                        var newEl = element.clone();
-
-
-                        var oldWidth = element[0].clientWidth;
-                        var oldHeight = element[0].clientHeight;
-
-                        newEl[0].style.width = oldWidth + 20 + 'px';
-
-                        var top = element.parent()[0].offsetTop;
-                        var left = element.parent()[0].offsetLeft;
-
-
-                        newEl[0].style.position = 'absolute';
-                        newEl[0].style.fontSize = "30px";
-                        newEl[0].style.borderRadius = '1px';
-
-
-                        newEl.off('mouseenter');
-                        element.off('mouseenter');
-
-                        element.parent().parent().prepend(newEl);
-
-
-                        newEl[0].style.top = top - oldHeight * 0.2 + 'px';
-                        left = left - 25;
-
-                        left = left >= 0 ? left : 0;
-                        newEl[0].style.left = left + 'px';
-                        newEl.addClass('shadow');
-
-                        div = angular.element('<div/>');
-//                        div.text('Veränderung: ' + scope.data.changeRate);
-                        div.text('Veränderung: ' + scope.data.displayChange);
-                        console.log(div);
-                        newEl.append(div);
-
-
-                        newEl.bind('mouseleave click', function () {
-                            newEl.remove();
-                            element[0].style.display = 'inline-block';
-                            element.bind('mouseenter', activate);
-                        });
-
+                scope: {
+                    data: "=",
+                    ready: '='
+                },
+                link: function (scope, currentTile) {
+                    var close = function () {
+                        currentTile.removeClass('zoomIn');
+                        scope.showDetails = false;
                     };
 
+                    var activate = function () {
+                        if (!scope.ready){
+                            return;
+                        }
+                        var container;
+                        var top, left;
+                        var detailDescription;
+                        var tileCopy = currentTile.clone();
 
-                    element.bind('mouseenter', activate);
-                    element.bind('mouseout', function () {
-                        element.removeClass('zoomIn');
-                        scope.showDetails = false;
+                        // calculate dimension of new tile
+                        var oldWidth = currentTile[0].clientWidth;
+                        var oldHeight = currentTile[0].clientHeight;
+                        tileCopy[0].style.width = String(oldWidth + 20) + 'px';
+                        tileCopy[0].style.position = 'absolute';
+
+                        // calculate position for new tile
+                        top = currentTile.parent()[0].offsetTop;
+                        tileCopy[0].style.top = String(top - oldHeight * 0.2) + 'px';
+                        left = currentTile.parent()[0].offsetLeft;
+                        left -= 25;
+                        left = left >= 0 ? left : 0;
+                        tileCopy[0].style.left = String(left) + 'px';
+
+                        // insert the new tile on top of the original tile (to maintain the flow)
+                        container = angular.element(document.getElementById('tile-container'));
+                        container.prepend(tileCopy);
+                        currentTile.off('mouseenter');
+
+                        // style the new tile
+                        tileCopy.addClass('active');
+
+                        // add details to the new tile
+                        detailDescription = angular.element("<div/>");
+                        detailDescription.text('Veränderung: ' + dotToComma(scope.data.displayChange));
+                        tileCopy.append(detailDescription);
 
 
+                        tileCopy.bind('mouseleave click', function () {
+                            tileCopy.remove();
+                            currentTile[0].style.display = 'inline-block';
+                            currentTile.bind('mouseenter', activate);
+                        });
+                    };
 
-
-
-
+                    currentTile.bind('mouseenter', activate);
+                    currentTile.bind('mouseout', function () {
+                        close();
                     });
-
                 }
             };
         }]);

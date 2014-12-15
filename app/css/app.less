@@ -1,89 +1,17 @@
-/* background image http://subtlepatterns.com  Licensce: http://creativecommons.org/licenses/by-sa/3.0/ */
-
 .content {
   text-align: center;
-
   max-width: 900px;
   margin: auto;
 }
 
-.head{
+.header {
   text-align: left;
   margin-left: 50px;
   margin-right: 50px;
 }
-.btn {
-  margin: 2px;
-  background-color: darkgray;
-  border: 1px solid #000000;
-  width: 160px;
-  height: 40px;
-}
-/* app css stylesheet */
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
-}
-
-.menu:before {
-  content: "[";
-}
-
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
-.tileParent {
-
-  display: inline-block;
-
-  vertical-align: middle; /* here */
-
-
-}
-.tile {
-
-  font-weight: normal;
-
-
-  width: 100%;
-
-  padding: 20px;
-  margin: 5px;
-
-  display: inline-block;
-
-
-}
-.tiletext {
-
-
-  -webkit-transform: scale(0.5);
-}
 
 body {
-//  background-color: #575757;
-
-
   background: url('../img/dark_geometric.png') repeat scroll 0% 0% transparent;
-
   color: white;
   font-weight: bold;
   font-family: "Courier New", Courier, monospace
@@ -92,27 +20,18 @@ body {
 h1 {
   color: #ffffff;
   font-family: "Helvetica", Monaco, monospace;
-
-
 }
 
-.tile-title {
-  font-family: "Helvetica", Monaco, monospace
-}
-.example-animate-container {
-  background: white;
-  border: 1px solid black;
-  list-style: none;
-  margin: 0;
-  padding: 0 10px;
+input.search-box {
+  height: 25px;
+  margin-top: 5px;
+  background-color: dimgray;
+  color: white;
+  border: 1px solid darkgray;
+  padding-left: 2px;
 }
 
-.animate-repeat {
-  /*line-height: 40px;*/
-  list-style: none;
-  box-sizing: border-box;
-}
-
+/* tiles fade out */
 .animate-repeat.ng-move,
 .animate-repeat.ng-enter,
 .animate-repeat.ng-leave {
@@ -124,86 +43,54 @@ h1 {
 .animate-repeat.ng-move,
 .animate-repeat.ng-enter {
   opacity: 0;
-  /*max-height: 0;*/
+
 }
 
+/* tiles show up during transition */
 .animate-repeat.ng-leave,
 .animate-repeat.ng-move.ng-move-active,
 .animate-repeat.ng-enter.ng-enter-active {
   opacity: 1;
-  /*max-height: 40px;*/
 }
 
-
-.zoomIn {
-  /*border: 1px solid gray;*/
-  z-index: 9999;
-  /*background-color: red !important;*/
-
-
-
-  @scale: 1.2;
-
-  -webkit-transform: scale(1.2);
-  /*border-radius: 5px;*/
-  -moz-transform: scale(@scale);
-  -ms-transform: scale(@scale);
-  -o-transform: scale(@scale);
-//  transform: scale(@scale);
-
-  -webkit-transition: all linear 0.2s;
-  transition: all linear 0.1s;
-
-
-  -moz-box-shadow: 10px 5px 5px black;
-  -webkit-box-shadow: 10px 5px 5px black;
-  -webkit-box-shadow: -10px -10px black;
-
-  box-shadow: 1px 0px 1px black, 0px 1px 1px black, 10px 5px 5px black;
-
-  @delay: 0.25s;
-  -webkit-transition-delay: @delay;
-  -moz-transition-delay: @delay;
-  -o-transition-delay: @delay;
-  -ms-transition-delay: @delay;
-  transition-delay: @delay;
-}
-
-
-.shadow {
-  -moz-box-shadow: 10px 5px 10px black;
-  -webkit-box-shadow: 10px 5px 5px black;
-  -webkit-box-shadow: -10px -10px  black;
-
-  box-shadow: 1px 0px 1px black, 0px 1px 1px black, 10px 5px 5px black;
-  border:3px solid white;
-
-
-}
-
+/*  tile layout */
 @numberColumns: 3;
 @colWidth: 250px;
-.masonry { /* Masonry container */
-    -moz-column-count: @numberColumns;
-    -webkit-column-count: @numberColumns;
-    column-count: @numberColumns;
-    -moz-column-gap: 0.5em;
-    -webkit-column-gap: 0.5em;
-    column-gap: 0.5em;
+@colGap: 5px;
+
+/* arrange tiles in columns */
+.masonry {
+  -moz-column-count: @numberColumns;
+  -webkit-column-count: @numberColumns;
+  column-count: @numberColumns;
+
+  -moz-column-gap: @colGap;
+  -webkit-column-gap: @colGap;
+  column-gap: @colGap;
 
   -webkit-column-width: @colWidth;
   -moz-column-width: @colWidth;
   column-width: @colWidth;
 }
 
-.item { /* Masonry bricks or child elements */
-//    background-color: #eee;
-    display: inline-block;
-    margin: 10 0 5px;
-//    width: 210px;
-    width: @colWidth;
+/* Masonry bricks or child elements */
+.tile {
+  display: inline-block;
+  margin: 5px 5px 5px;
+  width: @colWidth;
+  font-weight: normal;
+  width: @colWidth;
+  padding: 20px;
 }
 
-span.hidden {
-  display: none;
+.tile-title {
+  font-family: "Helvetica", Monaco, monospace
+}
+
+/* tile pop-out effect */
+.active {
+  box-shadow: 1px 0px 1px black, 0px 1px 1px black, 7px 5px 30px 5px black;
+  border: 2px solid white;
+  border-radius: 0px;
+  font-size: 25px;
 }
