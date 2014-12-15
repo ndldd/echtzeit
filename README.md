@@ -16,6 +16,8 @@ https://raw.githubusercontent.com/jsoma/tabletop/master/src/tabletop.js /
 
 https://github.com/angular/angular-seed
 
+background image http://subtlepatterns.com  Licensce: http://creativecommons.org/licenses/by-sa/3.0/
+
 
 ## Directory Layout
     .
